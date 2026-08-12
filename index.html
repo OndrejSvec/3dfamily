@@ -17,6 +17,12 @@
       padding: 3.5rem 1.25rem 5rem;
     }
 
+    #hub {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+    }
+
     header {
       text-align: center;
       margin-bottom: 3rem;
@@ -40,7 +46,6 @@
       grid-template-columns: repeat(2, 1fr);
       gap: 1.25rem;
       width: 100%;
-      max-width: 900px;
     }
 
     /* ── Card ── */
@@ -52,12 +57,18 @@
       overflow: hidden;
       aspect-ratio: 16 / 9;
       box-shadow: 0 2px 16px rgba(0,0,0,0.15);
-      transition: transform 0.22s ease, box-shadow 0.22s ease;
+      transition: transform 0.22s ease, box-shadow 0.22s ease, filter 0.3s ease;
+      z-index: 1;
     }
 
-    .card:hover {
+    .card.dimmed {
+      filter: brightness(0.38);
+    }
+
+    .card.active {
       transform: translateY(-5px) scale(1.015);
-      box-shadow: 0 16px 44px rgba(0,0,0,0.25);
+      box-shadow: 0 16px 44px rgba(0,0,0,0.35);
+      z-index: 2;
     }
 
     /* Screenshot background */
@@ -69,11 +80,11 @@
       transition: transform 0.45s ease;
     }
 
-    .card:hover .card-bg {
+    .card.active .card-bg {
       transform: scale(1.05);
     }
 
-    /* Dark overlay for readability */
+    /* Dark overlay */
     .card-overlay {
       position: absolute;
       inset: 0;
@@ -81,8 +92,8 @@
       transition: background 0.22s ease;
     }
 
-    .card:hover .card-overlay {
-      background: rgba(0, 0, 0, 0.2);
+    .card.active .card-overlay {
+      background: rgba(0, 0, 0, 0.20);
     }
 
     /* ── Top: site label pill ── */
@@ -108,10 +119,11 @@
       transition: background 0.2s ease, color 0.2s ease;
     }
 
-    .card:hover .card-label {
-      background: #3ab54a;
-      color: #fff;
-    }
+    .card.active .card-label { color: #fff; }
+    .card[data-t="zgumy"].active      .card-label { background: #e07b2b; }
+    .card[data-t="printiverse"].active .card-label { background: #d4921a; }
+    .card[data-t="heroface"].active    .card-label { background: #6b32d4; }
+    .card[data-t="dickasso"].active    .card-label { background: #b89000; }
 
     /* ── Bottom: frosted glass description ── */
     .card-bottom {
@@ -129,7 +141,7 @@
       transition: transform 0.22s ease, opacity 0.22s ease, background 0.22s ease;
     }
 
-    .card:hover .card-bottom {
+    .card.active .card-bottom {
       transform: translateY(0);
       opacity: 1;
       background: rgba(0, 0, 0, 0.62);
@@ -142,66 +154,250 @@
       font-weight: 400;
     }
 
+    /* ── Icon layer ── */
+    #il {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    .fi {
+      position: absolute;
+      pointer-events: none;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+    }
+
+    @keyframes from-l { from { transform: translateX(-44px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes from-r { from { transform: translateX(44px);  opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes from-t { from { transform: translateY(-44px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes from-b { from { transform: translateY(44px);  opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
     @media (max-width: 580px) {
-      .grid {
-        grid-template-columns: 1fr;
-        max-width: 440px;
-      }
+      .grid { grid-template-columns: 1fr; max-width: 440px; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>3D Family.cz</h1>
-    <p class="subtitle">Rozcestník pro naše projekty v 3D tisku</p>
-  </header>
+  <div id="hub">
+    <header>
+      <h1>3D Family.cz</h1>
+      <p class="subtitle">Rozcestník pro naše projekty v 3D tisku</p>
+    </header>
 
-  <main class="grid">
+    <main class="grid">
 
-    <a href="https://zgumy.cz" class="card" target="_blank" rel="noopener noreferrer">
-      <div class="card-bg" style="background-image: url('img/zgumy.jpg')"></div>
-      <div class="card-overlay"></div>
-      <div class="card-top">
-        <span class="card-label">Zgumy.cz</span>
-      </div>
-      <div class="card-bottom">
-        <p class="card-desc">Rychlá výroba těsnění, podložek a technických dílů na míru z 3D tisku.</p>
-      </div>
-    </a>
+      <a href="https://zgumy.cz" class="card" data-t="zgumy" target="_blank" rel="noopener noreferrer">
+        <div class="card-bg" style="background-image: url('img/zgumy.jpg')"></div>
+        <div class="card-overlay"></div>
+        <div class="card-top">
+          <span class="card-label">Zgumy.cz</span>
+        </div>
+        <div class="card-bottom">
+          <p class="card-desc">Rychlá výroba těsnění, podložek a technických dílů na míru z 3D tisku.</p>
+        </div>
+      </a>
 
-    <a href="https://printiverse.cz" class="card" target="_blank" rel="noopener noreferrer">
-      <div class="card-bg" style="background-image: url('img/printiverse.jpg')"></div>
-      <div class="card-overlay"></div>
-      <div class="card-top">
-        <span class="card-label">Printiverse.cz</span>
-      </div>
-      <div class="card-bottom">
-        <p class="card-desc">Galerie originálních 3D modelů k tisku. Vyber design, přizpůsob barvy a nech si ho vytisknout.</p>
-      </div>
-    </a>
+      <a href="https://printiverse.cz" class="card" data-t="printiverse" target="_blank" rel="noopener noreferrer">
+        <div class="card-bg" style="background-image: url('img/printiverse.jpg')"></div>
+        <div class="card-overlay"></div>
+        <div class="card-top">
+          <span class="card-label">Printiverse.cz</span>
+        </div>
+        <div class="card-bottom">
+          <p class="card-desc">Galerie originálních 3D modelů k tisku. Vyber design, přizpůsob barvy a nech si ho vytisknout.</p>
+        </div>
+      </a>
 
-    <a href="https://www.heroface.cz" class="card" target="_blank" rel="noopener noreferrer">
-      <div class="card-bg" style="background-image: url('img/heroface.jpg')"></div>
-      <div class="card-overlay"></div>
-      <div class="card-top">
-        <span class="card-label">HeroFace.cz</span>
-      </div>
-      <div class="card-bottom">
-        <p class="card-desc">Vaše tvář na těle hrdiny. 3D figurka s vaším obličejem — rytíř, kentaur nebo cokoli si přejete.</p>
-      </div>
-    </a>
+      <a href="https://www.heroface.cz" class="card" data-t="heroface" target="_blank" rel="noopener noreferrer">
+        <div class="card-bg" style="background-image: url('img/heroface.jpg')"></div>
+        <div class="card-overlay"></div>
+        <div class="card-top">
+          <span class="card-label">HeroFace.cz</span>
+        </div>
+        <div class="card-bottom">
+          <p class="card-desc">Vaše tvář na těle hrdiny. 3D figurka s vaším obličejem — rytíř, kentaur nebo cokoli si přejete.</p>
+        </div>
+      </a>
 
-    <a href="https://dickasso.cz" class="card" target="_blank" rel="noopener noreferrer">
-      <div class="card-bg" style="background-image: url('img/dickasso.jpg')"></div>
-      <div class="card-overlay"></div>
-      <div class="card-top">
-        <span class="card-label">Dickasso.cz</span>
-      </div>
-      <div class="card-bottom">
-        <p class="card-desc">Every face deserves a masterpiece. Prémiová umělecká služba pro nesmrtelnost každé tváře.</p>
-      </div>
-    </a>
+      <a href="https://dickasso.cz" class="card" data-t="dickasso" target="_blank" rel="noopener noreferrer">
+        <div class="card-bg" style="background-image: url('img/dickasso.jpg')"></div>
+        <div class="card-overlay"></div>
+        <div class="card-top">
+          <span class="card-label">Dickasso.cz</span>
+        </div>
+        <div class="card-bottom">
+          <p class="card-desc">Every face deserves a masterpiece. Prémiová umělecká služba pro nesmrtelnost každé tváře.</p>
+        </div>
+      </a>
 
-  </main>
+    </main>
+
+    <div id="il"></div>
+  </div>
+
+  <script>
+  function tire(sz,col,v){
+    const cx=sz/2,cy=sz/2,oR=sz/2-2,iR=sz*.28,hR=sz*.10;
+    const ns=[4,5,6,5,4,6][v%6],off=v*.38,nt=10;
+    let tr='',sp='';
+    for(let i=0;i<nt;i++){const a=(i/nt)*Math.PI*2;tr+=`<line x1="${(cx+(oR-3.5)*Math.cos(a)).toFixed(1)}" y1="${(cy+(oR-3.5)*Math.sin(a)).toFixed(1)}" x2="${(cx+oR*Math.cos(a)).toFixed(1)}" y2="${(cy+oR*Math.sin(a)).toFixed(1)}" stroke-width="3.5"/>`}
+    for(let i=0;i<ns;i++){const a=off+(i/ns)*Math.PI*2;sp+=`<line x1="${(cx+(hR+1)*Math.cos(a)).toFixed(1)}" y1="${(cy+(hR+1)*Math.sin(a)).toFixed(1)}" x2="${(cx+(iR-1)*Math.cos(a)).toFixed(1)}" y2="${(cy+(iR-1)*Math.sin(a)).toFixed(1)}" stroke-width="2.2"/>`}
+    return`<svg viewBox="0 0 ${sz} ${sz}" width="${sz}" height="${sz}" fill="none" stroke="${col}" stroke-linecap="round"><circle cx="${cx}" cy="${cy}" r="${oR}" stroke-width="4.5"/><circle cx="${cx}" cy="${cy}" r="${iR}" stroke-width="1.8"/><circle cx="${cx}" cy="${cy}" r="${hR}" fill="${col}" stroke="none"/>${sp}${tr}</svg>`;
+  }
+
+  function knight(sz,col){
+    return`<svg viewBox="0 0 40 54" width="${Math.round(sz*.78)}" height="${sz}" fill="${col}"><path d="M20 3C8 3 6 14 6 23L6 38Q6 43 13 43L27 43Q34 43 34 38L34 23C34 14 32 3 20 3Z"/><rect x="9" y="23" width="22" height="5" rx="1" fill="rgba(0,0,0,.38)"/><path d="M13 43L13 49L27 49L27 43Z"/><path d="M6 37L1 40L1 53L13 53L13 43L6 43Z"/><path d="M34 37L39 40L39 53L27 53L27 43L34 43Z"/><path d="M20 3Q25-2 29 1Q27 5 23 6Z"/></svg>`;
+  }
+
+  function angel(sz,col){
+    return`<svg viewBox="0 0 64 58" width="${Math.round(sz*1.1)}" height="${sz}" fill="${col}"><ellipse cx="32" cy="4.5" rx="10.5" ry="3.5" fill="none" stroke="${col}" stroke-width="2.5"/><circle cx="32" cy="14" r="8.5"/><path d="M24 22Q22 32 20 46Q26 48 32 48Q38 48 44 46Q42 32 40 22Q36 24 32 24Q28 24 24 22Z"/><path d="M22 26Q4 18 1 34Q3 39 10 38Q19 36 24 30Z"/><path d="M22 32Q5 35 4 46Q10 46 18 42Q22 39 24 36Z"/><path d="M42 26Q60 18 63 34Q61 39 54 38Q45 36 40 30Z"/><path d="M42 32Q59 35 60 46Q54 46 46 42Q42 39 40 36Z"/></svg>`;
+  }
+
+  function centaur(sz,col){
+    return`<svg viewBox="0 0 70 54" width="${Math.round(sz*1.3)}" height="${sz}" fill="${col}"><ellipse cx="46" cy="36" rx="21" ry="13"/><rect x="18" y="24" width="32" height="15" rx="7"/><ellipse cx="22" cy="23" rx="9.5" ry="14"/><circle cx="22" cy="8" r="8.5"/><rect x="13" y="45" width="5.5" height="9" rx="2"/><rect x="23" y="45" width="5.5" height="9" rx="2"/><rect x="39" y="45" width="5.5" height="9" rx="2"/><rect x="52" y="45" width="5.5" height="9" rx="2"/><path d="M67 30Q77 20 72 13Q65 23 62 33Z"/><rect x="31" y="13" width="3" height="18" rx="1.3" transform="rotate(22,31,13)"/><polygon points="35,8 41,13 31,15"/></svg>`;
+  }
+
+  function wizard(sz,col){
+    return`<svg viewBox="0 0 44 62" width="${Math.round(sz*.78)}" height="${sz}" fill="${col}"><polygon points="22,2 10,27 34,27"/><rect x="7" y="25" width="30" height="5" rx="2.5"/><circle cx="22" cy="38" r="9.5"/><path d="M10 47L8 62L36 62L34 47Q28 50 22 50Q16 50 10 47Z"/><rect x="36" y="29" width="3.5" height="33" rx="1.5"/><circle cx="37.5" cy="26" r="5.5"/><circle cx="37.5" cy="26" r="2.5" fill="rgba(255,255,255,.2)"/></svg>`;
+  }
+
+  function robot(sz,col){
+    return`<svg viewBox="0 0 40 52" width="${Math.round(sz*.84)}" height="${sz}" fill="${col}"><rect x="8" y="12" width="24" height="20" rx="3"/><circle cx="14" cy="21" r="3.5" fill="rgba(0,0,0,.32)"/><circle cx="26" cy="21" r="3.5" fill="rgba(0,0,0,.32)"/><rect x="14" y="27" width="12" height="3" rx="1.5" fill="rgba(0,0,0,.22)"/><rect x="10" y="32" width="20" height="16" rx="2"/><rect x="3" y="33" width="7" height="11" rx="2"/><rect x="30" y="33" width="7" height="11" rx="2"/><rect x="13" y="48" width="6" height="4" rx="1"/><rect x="21" y="48" width="6" height="4" rx="1"/><rect x="18" y="5" width="4" height="9" rx="2"/><rect x="12" y="3" width="16" height="5" rx="2.5"/></svg>`;
+  }
+
+  function house(sz,col){
+    return`<svg viewBox="0 0 44 46" width="${Math.round(sz*.96)}" height="${sz}" fill="${col}"><polygon points="22,3 2,22 42,22"/><rect x="5" y="20" width="34" height="26" rx="2"/><rect x="15" y="32" width="10" height="14" rx="1" fill="rgba(0,0,0,.28)"/><rect x="8" y="26" width="9" height="9" rx="1" fill="rgba(0,0,0,.22)"/><rect x="27" y="26" width="9" height="9" rx="1" fill="rgba(0,0,0,.22)"/></svg>`;
+  }
+
+  function star(sz,col){
+    const cx=sz/2,cy=sz/2,oR=sz/2-1,iR=sz*.19;
+    let pts='';
+    for(let i=0;i<10;i++){const a=(i/10)*Math.PI*2-Math.PI/2,r=i%2===0?oR:iR;pts+=`${(cx+r*Math.cos(a)).toFixed(1)},${(cy+r*Math.sin(a)).toFixed(1)} `}
+    return`<svg viewBox="0 0 ${sz} ${sz}" width="${sz}" height="${sz}" fill="${col}"><polygon points="${pts}"/></svg>`;
+  }
+
+  function planet(sz,col){
+    const cx=sz/2,cy=sz/2,r=sz/2-3;
+    return`<svg viewBox="0 0 ${sz} ${sz}" width="${sz}" height="${sz}" fill="${col}"><circle cx="${cx}" cy="${cy}" r="${r}"/><ellipse cx="${cx}" cy="${cy}" rx="${(sz*.46).toFixed(1)}" ry="${(sz*.16).toFixed(1)}" fill="none" stroke="${col}" stroke-width="3.5" opacity=".7" transform="rotate(-28,${cx},${cy})"/><ellipse cx="${cx}" cy="${cy}" rx="${(sz*.46).toFixed(1)}" ry="${(sz*.16).toFixed(1)}" fill="none" stroke="rgba(0,0,0,.28)" stroke-width="2" transform="rotate(-28,${cx},${cy})"/></svg>`;
+  }
+
+  function dickClassic(sz,col){
+    const w=Math.round(sz*.52),H=Math.round(sz*1.12);
+    const hW=Math.round(w*.96),hH=Math.round(H*.25);
+    const sW=Math.round(w*.70),sH=Math.round(H*.56),sX=Math.round((w-sW)/2),sY=Math.round(hH*.82);
+    const bR=Math.round(w*.31),bY=sY+sH+Math.round(bR*.5);
+    const vW=w+bR*2,cx=w/2+bR;
+    return`<svg viewBox="0 0 ${vW} ${bY+bR}" width="${vW}" height="${bY+bR}" fill="${col}"><ellipse cx="${cx}" cy="${hH/2}" rx="${hW/2}" ry="${hH/2}"/><ellipse cx="${cx}" cy="${sY-1.5}" rx="${hW/2+1.5}" ry="2.8"/><rect x="${sX+bR}" y="${sY-1}" width="${sW}" height="${sH+1}" rx="${Math.round(sW*.44)}"/><circle cx="${cx-bR*.76}" cy="${bY}" r="${bR}"/><circle cx="${cx+bR*.76}" cy="${bY}" r="${bR}"/></svg>`;
+  }
+
+  function dickSlim(sz,col){
+    const w=Math.round(sz*.38),H=Math.round(sz*1.38);
+    const hW=Math.round(w*.94),hH=Math.round(H*.18);
+    const sW=Math.round(w*.66),sH=Math.round(H*.68),sX=Math.round((w-sW)/2),sY=Math.round(hH*.8);
+    const bR=Math.round(w*.30),bY=sY+sH+Math.round(bR*.48);
+    const vW=w+bR*2,cx=w/2+bR;
+    return`<svg viewBox="0 0 ${vW} ${bY+bR}" width="${vW}" height="${bY+bR}" fill="${col}"><ellipse cx="${cx}" cy="${hH/2}" rx="${hW/2}" ry="${hH/2}"/><ellipse cx="${cx}" cy="${sY-1}" rx="${hW/2+1}" ry="2"/><rect x="${sX+bR}" y="${sY-1}" width="${sW}" height="${sH+1}" rx="${Math.round(sW*.46)}"/><circle cx="${cx-bR*.73}" cy="${bY}" r="${bR}"/><circle cx="${cx+bR*.73}" cy="${bY}" r="${bR}"/></svg>`;
+  }
+
+  function dickThick(sz,col){
+    const w=Math.round(sz*.70),H=Math.round(sz*.9);
+    const hW=Math.round(w*.98),hH=Math.round(H*.29);
+    const sW=Math.round(w*.85),sH=Math.round(H*.48),sX=Math.round((w-sW)/2),sY=Math.round(hH*.84);
+    const bR=Math.round(w*.36),bY=sY+sH+Math.round(bR*.58);
+    const vW=w+bR*2,cx=w/2+bR;
+    return`<svg viewBox="0 0 ${vW} ${bY+bR}" width="${vW}" height="${bY+bR}" fill="${col}"><ellipse cx="${cx}" cy="${hH/2}" rx="${hW/2}" ry="${hH/2}"/><ellipse cx="${cx}" cy="${sY-1.5}" rx="${hW/2+2}" ry="3.5"/><rect x="${sX+bR}" y="${sY-1}" width="${sW}" height="${sH+1}" rx="${Math.round(sW*.33)}"/><circle cx="${cx-bR*.81}" cy="${bY}" r="${bR}"/><circle cx="${cx+bR*.81}" cy="${bY}" r="${bR}"/></svg>`;
+  }
+
+  function dickCurved(sz,col){
+    const w=Math.round(sz*.8),H=Math.round(sz*1.1);
+    const sw=Math.round(sz*.21),bR=Math.round(sz*.18);
+    const hCx=Math.round(w*.52),hCy=Math.round(H*.17);
+    const hRx=Math.round(sz*.20),hRy=Math.round(sz*.14);
+    const bY=H-bR;
+    return`<svg viewBox="0 0 ${w} ${H}" width="${w}" height="${H}" fill="${col}" stroke="${col}"><path d="M${Math.round(w*.48)} ${Math.round(H*.24)}Q${Math.round(w*.10)} ${Math.round(H*.53)} ${Math.round(w*.38)} ${Math.round(H*.78)}" stroke="${col}" stroke-width="${sw}" stroke-linecap="round" fill="none"/><ellipse cx="${hCx}" cy="${hCy}" rx="${hRx}" ry="${hRy}" transform="rotate(-16,${hCx},${hCy})" fill="${col}" stroke="none"/><ellipse cx="${Math.round(w*.49)}" cy="${Math.round(H*.25)}" rx="${hRx+1.5}" ry="${Math.round(hRy*.65)}" transform="rotate(-16,${Math.round(w*.49)},${Math.round(H*.25)})" fill="none" stroke="${col}" stroke-width="1.6"/><circle cx="${Math.round(w*.26)}" cy="${bY}" r="${bR}" stroke="none"/><circle cx="${Math.round(w*.50)}" cy="${bY}" r="${bR}" stroke="none"/></svg>`;
+  }
+
+  const SVGFNS={tire,knight,angel,centaur,wizard,robot,house,star,planet,dickClassic,dickSlim,dickThick,dickCurved};
+
+  const THEMES={
+    zgumy:{col:'#e07b2b',icons:[
+      ['tire','L',.22,  0, 46,'from-l',0],['tire','L',.68,190, 34,'from-l',1],
+      ['tire','T',.24, 65, 40,'from-t',2],['tire','T',.72,250, 28,'from-t',3],
+      ['tire','R',.28,120, 44,'from-r',4],['tire','R',.70,300, 32,'from-r',5],
+      ['tire','B',.35, 90, 38,'from-b',0],['tire','B',.74,210, 28,'from-b',2],
+    ]},
+    printiverse:{col:'#e09918',icons:[
+      ['robot', 'L',.32,  0, 36,'from-l'],['robot', 'L',.74,230, 28,'from-l'],
+      ['house', 'T',.20, 80, 32,'from-t'],['house', 'T',.66,155, 40,'from-t'],
+      ['star',  'R',.26, 40, 30,'from-r'],['planet','R',.70,260, 36,'from-r'],
+      ['planet','B',.30,115, 30,'from-b'],['star',  'B',.74,320, 26,'from-b'],
+    ]},
+    heroface:{col:'#7b3ff0',icons:[
+      ['knight', 'L',.22,  0, 48,'from-l'],['angel',  'L',.70,205, 50,'from-l'],
+      ['centaur','T',.16, 80, 46,'from-t'],['wizard', 'T',.64,145, 42,'from-t'],
+      ['knight', 'R',.30, 40, 46,'from-r'],['angel',  'R',.72,265, 52,'from-r'],
+      ['centaur','B',.20,115, 46,'from-b'],['wizard', 'B',.68,325, 40,'from-b'],
+    ]},
+    dickasso:{col:'#ffc800',icons:[
+      ['dickClassic','L',.20,  0, 40,'from-l'],['dickSlim',  'L',.68,195, 34,'from-l'],
+      ['dickThick',  'T',.18, 70, 46,'from-t'],['dickCurved','T',.66,200, 38,'from-t'],
+      ['dickClassic','R',.26, 40, 38,'from-r'],['dickSlim',  'R',.72,285, 44,'from-r'],
+      ['dickThick',  'B',.34,105, 44,'from-b'],['dickCurved','B',.74,255, 38,'from-b'],
+    ]}
+  };
+
+  function pos(side,along,sz,cr,hr){
+    const cl=cr.left-hr.left,ct=cr.top-hr.top,cR=cr.right-hr.left,cb=cr.bottom-hr.top;
+    const h=sz/2,g=4;
+    if(side==='L')return[cl-h-g,ct+along*cr.height-h];
+    if(side==='R')return[cR-h+g,ct+along*cr.height-h];
+    if(side==='T')return[cl+along*cr.width-h,ct-h-g];
+    if(side==='B')return[cl+along*cr.width-h,cb-h+g];
+  }
+
+  const cards=document.querySelectorAll('.card');
+  const il=document.getElementById('il');
+  const hub=document.getElementById('hub');
+  let active=null,hideT=null;
+
+  function showIcons(card){
+    if(hideT){clearTimeout(hideT);hideT=null}
+    il.innerHTML='';
+    const t=card.dataset.t,cfg=THEMES[t];
+    if(!cfg)return;
+    const cr=card.getBoundingClientRect(),hr=hub.getBoundingClientRect();
+    cfg.icons.forEach(([type,side,along,delay,sz,anim,v=0])=>{
+      const[x,y]=pos(side,along,sz,cr,hr);
+      const svg=SVGFNS[type]?SVGFNS[type](sz,cfg.col,v):'';
+      const el=document.createElement('div');
+      el.className='fi';
+      el.style.cssText=`left:${x}px;top:${y}px;opacity:0`;
+      el.innerHTML=svg;
+      il.appendChild(el);
+      setTimeout(()=>{
+        el.style.opacity='1';
+        el.style.animation=`${anim} .48s cubic-bezier(.34,1.56,.64,1) forwards`;
+      },delay);
+    });
+  }
+
+  cards.forEach(card=>{
+    card.addEventListener('mouseenter',()=>{
+      if(hideT){clearTimeout(hideT);hideT=null}
+      active=card;
+      cards.forEach(c=>{c.classList.remove('active','dimmed');if(c!==card)c.classList.add('dimmed')});
+      card.classList.add('active');
+      showIcons(card);
+    });
+    card.addEventListener('mouseleave',()=>{
+      hideT=setTimeout(()=>{
+        if(active===card){active=null;cards.forEach(c=>c.classList.remove('active','dimmed'));il.innerHTML=''}
+        hideT=null;
+      },120);
+    });
+  });
+  </script>
 </body>
 </html>
