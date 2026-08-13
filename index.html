@@ -176,6 +176,21 @@
 
     @media (max-width: 580px) {
       .grid { grid-template-columns: 1fr; max-width: 440px; }
+      body { padding: 2rem 1rem 3rem; }
+      header { margin-bottom: 2rem; }
+    }
+
+    /* ── Touch / no-hover devices ── */
+    @media (hover: none) {
+      .card-bottom {
+        transform: none;
+        opacity: 1;
+      }
+      .card:active {
+        transform: scale(0.97);
+        box-shadow: 0 1px 8px rgba(0,0,0,.2);
+        transition-duration: .08s;
+      }
     }
   </style>
 </head>
@@ -361,6 +376,7 @@
   const il=document.getElementById('il');
   const hub=document.getElementById('hub');
   let active=null,hideT=null;
+  const isTouch=window.matchMedia('(hover: none)').matches;
 
   function showIcons(card){
     if(hideT){clearTimeout(hideT);hideT=null}
@@ -383,21 +399,38 @@
     });
   }
 
-  cards.forEach(card=>{
-    card.addEventListener('mouseenter',()=>{
-      if(hideT){clearTimeout(hideT);hideT=null}
-      active=card;
-      cards.forEach(c=>{c.classList.remove('active','dimmed');if(c!==card)c.classList.add('dimmed')});
-      card.classList.add('active');
-      showIcons(card);
+  if(!isTouch){
+    cards.forEach(card=>{
+      card.addEventListener('mouseenter',()=>{
+        if(hideT){clearTimeout(hideT);hideT=null}
+        active=card;
+        cards.forEach(c=>{c.classList.remove('active','dimmed');if(c!==card)c.classList.add('dimmed')});
+        card.classList.add('active');
+        showIcons(card);
+      });
+      card.addEventListener('mouseleave',()=>{
+        hideT=setTimeout(()=>{
+          if(active===card){active=null;cards.forEach(c=>c.classList.remove('active','dimmed'));il.innerHTML=''}
+          hideT=null;
+        },120);
+      });
     });
-    card.addEventListener('mouseleave',()=>{
-      hideT=setTimeout(()=>{
-        if(active===card){active=null;cards.forEach(c=>c.classList.remove('active','dimmed'));il.innerHTML=''}
-        hideT=null;
-      },120);
+  }else{
+    cards.forEach(card=>{
+      card.addEventListener('touchstart',()=>{
+        if(hideT){clearTimeout(hideT);hideT=null}
+        active=card;
+        cards.forEach(c=>{c.classList.remove('active','dimmed');if(c!==card)c.classList.add('dimmed')});
+        card.classList.add('active');
+      },{passive:true});
+      card.addEventListener('touchend',()=>{
+        hideT=setTimeout(()=>{
+          cards.forEach(c=>c.classList.remove('active','dimmed'));
+          active=null;hideT=null;
+        },500);
+      });
     });
-  });
+  }
   </script>
 </body>
 </html>
